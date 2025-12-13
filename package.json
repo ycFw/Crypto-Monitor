@@ -1,0 +1,19 @@
+{
+  "name": "crypto-monitor",
+  "version": "1.0.0",
+  "description": "OKX Trader Monitor with Telegram Notifications",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js"
+  },
+  "keywords": [
+    "okx",
+    "crypto",
+    "telegram",
+    "monitor"
+  ],
+  "author": "",
+  "license": "MIT"
+}
