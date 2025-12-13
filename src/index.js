@@ -3,6 +3,9 @@
  * 主入口文件
  */
 
+// Load environment variables from .env file (for local development)
+import 'dotenv/config';
+
 import { CONFIG } from './config.js';
 import { sendMessage, initTelegram } from './telegram.js';
 import { runMonitorCycle } from './monitor.js';

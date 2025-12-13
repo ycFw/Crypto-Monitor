@@ -1,15 +1,25 @@
 /**
  * Configuration file
- * Centralized management of all sensitive info and settings
+ * All sensitive info loaded from environment variables
  */
 
+// Validate required environment variables
+const requiredEnvVars = ['TELEGRAM_BOT_TOKEN', 'TELEGRAM_CHAT_ID'];
+for (const envVar of requiredEnvVars) {
+  if (!process.env[envVar]) {
+    console.error(`❌ Missing required environment variable: ${envVar}`);
+    console.error('Please set it in Railway dashboard or .env file');
+    process.exit(1);
+  }
+}
+
 export const CONFIG = {
-  // Telegram Bot
-  TELEGRAM_BOT_TOKEN: '8459014132:AAF0WBtQOaQ3aAI_-HHayfwKBv0Cd_r2PkU',
-  TELEGRAM_CHAT_ID: '-1003607111369',
+  // Telegram Bot (required)
+  TELEGRAM_BOT_TOKEN: process.env.TELEGRAM_BOT_TOKEN,
+  TELEGRAM_CHAT_ID: process.env.TELEGRAM_CHAT_ID,
   
-  // Traders to monitor
-  TRADERS: [
+  // Traders to monitor (can be customized via env or use defaults)
+  TRADERS: process.env.TRADERS ? JSON.parse(process.env.TRADERS) : [
     {
       id: 'trader1',
       uniqueName: 'BAE096C1DD31D029',
@@ -25,6 +35,6 @@ export const CONFIG = {
   ],
   
   // Polling intervals (milliseconds)
-  POSITION_POLL_INTERVAL: 30000,  // 30s - position monitoring
-  COMMAND_POLL_INTERVAL: 2000,    // 2s - command checking
+  POSITION_POLL_INTERVAL: parseInt(process.env.POSITION_POLL_INTERVAL) || 30000,
+  COMMAND_POLL_INTERVAL: parseInt(process.env.COMMAND_POLL_INTERVAL) || 2000,
 };
