@@ -1,18 +1,23 @@
 {
   "name": "crypto-monitor",
   "version": "1.0.0",
-  "description": "OKX Trader Monitor with Telegram Notifications",
+  "description": "Crypto Monitor - OKX Trader & Arbitrage",
   "main": "src/index.js",
   "type": "module",
   "scripts": {
     "start": "node src/index.js",
-    "dev": "node --watch src/index.js"
+    "dev": "node --watch src/index.js",
+    "arbitrage": "node src/arbitrage/index.js",
+    "arbitrage:dev": "node --watch src/arbitrage/index.js"
   },
   "keywords": [
     "okx",
     "crypto",
     "telegram",
-    "monitor"
+    "monitor",
+    "arbitrage",
+    "polymarket",
+    "opinion"
   ],
   "author": "",
   "license": "MIT",
