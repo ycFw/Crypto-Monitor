@@ -16,9 +16,16 @@ export function detectArbitrage(matchedPairs) {
   for (const pair of matchedPairs) {
     const { opinion, polymarket } = pair;
     
+    // 跳过价格异常的市场（价格为 0 或接近 0）
+    if (opinion.yesPrice < 0.001 || opinion.noPrice < 0.001) continue;
+    if (polymarket.yesPrice < 0.001 || polymarket.noPrice < 0.001) continue;
+    
     // 策略1: 买 Opinion YES + 买 Polymarket NO
     const combo1 = opinion.yesPrice + polymarket.noPrice;
-    if (combo1 <= ARBITRAGE_CONFIG.THRESHOLD) {
+    const profit1Pct = (1 - combo1) / combo1 * 100;
+    
+    // 只接受合理的套利（总成本在 0.5-0.97 之间，利润在 3%-50% 之间）
+    if (combo1 <= ARBITRAGE_CONFIG.THRESHOLD && combo1 >= 0.5 && profit1Pct <= 50 && profit1Pct >= 3) {
       opportunities.push({
         type: 'opinion_yes_poly_no',
         pair: pair,
@@ -28,14 +35,16 @@ export function detectArbitrage(matchedPairs) {
         polymarketPrice: polymarket.noPrice,
         totalCost: combo1,
         profit: 1 - combo1,
-        profitPercent: ((1 - combo1) / combo1 * 100).toFixed(2),
+        profitPercent: profit1Pct.toFixed(2),
         description: `买 Opinion YES @${opinion.yesPrice.toFixed(3)} + 买 Polymarket NO @${polymarket.noPrice.toFixed(3)}`
       });
     }
     
     // 策略2: 买 Opinion NO + 买 Polymarket YES
     const combo2 = opinion.noPrice + polymarket.yesPrice;
-    if (combo2 <= ARBITRAGE_CONFIG.THRESHOLD) {
+    const profit2Pct = (1 - combo2) / combo2 * 100;
+    
+    if (combo2 <= ARBITRAGE_CONFIG.THRESHOLD && combo2 >= 0.5 && profit2Pct <= 50 && profit2Pct >= 3) {
       opportunities.push({
         type: 'opinion_no_poly_yes',
         pair: pair,
@@ -45,7 +54,7 @@ export function detectArbitrage(matchedPairs) {
         polymarketPrice: polymarket.yesPrice,
         totalCost: combo2,
         profit: 1 - combo2,
-        profitPercent: ((1 - combo2) / combo2 * 100).toFixed(2),
+        profitPercent: profit2Pct.toFixed(2),
         description: `买 Opinion NO @${opinion.noPrice.toFixed(3)} + 买 Polymarket YES @${polymarket.yesPrice.toFixed(3)}`
       });
     }

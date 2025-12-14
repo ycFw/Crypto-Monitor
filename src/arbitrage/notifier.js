@@ -55,7 +55,7 @@ ${profitEmoji} <b>套利机会发现!</b>
 💵 <b>总成本:</b> <code>$${totalCost.toFixed(4)}</code>
 📈 <b>利润:</b> <code>$${profit.toFixed(4)}</code> (<b>${profitPercent}%</b>)
 
-🔗 <a href="https://app.opinion.trade/topic/${pair.opinion.id}">Opinion</a> | <a href="https://polymarket.com/event/${pair.polymarket.eventSlug}">Polymarket</a>
+🔗 <a href="https://app.opinion.trade/macro">Opinion</a> | <a href="https://polymarket.com/event/${pair.polymarket.eventSlug}">Polymarket</a>
 
 ⏰ ${new Date().toLocaleString('zh-CN', { timeZone: 'Asia/Tokyo' })}
 `.trim();
