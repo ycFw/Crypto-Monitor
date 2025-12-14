@@ -11,6 +11,7 @@ import { getAllPolymarketMarkets } from './polymarket.js';
 import { matchAllMarkets } from './matcher.js';
 import { detectArbitrage, filterNewOpportunities, getFullAnalysis } from './detector.js';
 import { notifyStartup, notifyMultipleOpportunities, notifyError, notifyStatus } from './notifier.js';
+import { initCommands, checkCommands, setStats } from './commands.js';
 
 // 统计数据
 const stats = {
@@ -20,7 +21,10 @@ const stats = {
   notificationsSent: 0,
   lastOpportunity: null,
   lastScanTime: null,
-  errors: 0
+  errors: 0,
+  opinionMarkets: 0,
+  polymarketMarkets: 0,
+  matchedPairs: 0
 };
 
 /**
@@ -44,10 +48,17 @@ async function runScanCycle() {
     
     console.log(`📊 Opinion: ${opinionMarkets.length} markets, Polymarket: ${polymarketMarkets.length} markets`);
     
+    // 更新统计
+    stats.opinionMarkets = opinionMarkets.length;
+    stats.polymarketMarkets = polymarketMarkets.length;
+    
     // 2. 匹配相同的市场
     console.log('🔗 Matching markets...');
     const matchedPairs = matchAllMarkets(opinionMarkets, polymarketMarkets);
     console.log(`✅ Found ${matchedPairs.length} matched pairs`);
+    
+    // 更新统计
+    stats.matchedPairs = matchedPairs.length;
     
     if (matchedPairs.length === 0) {
       console.log('⚠️ No matched markets, skipping this cycle');
@@ -130,6 +141,10 @@ async function main() {
   
   console.log('\n🚀 Starting Arbitrage Monitor...\n');
   
+  // 初始化命令处理
+  await initCommands();
+  setStats(stats);
+  
   // 发送启动通知
   await notifyStartup();
   
@@ -138,6 +153,9 @@ async function main() {
   
   // 定时扫描
   setInterval(runScanCycle, ARBITRAGE_CONFIG.POLL_INTERVAL);
+  
+  // 定时检查命令（每2秒）
+  setInterval(checkCommands, 2000);
   
   // 定时报告状态（每小时）
   setInterval(async () => {
