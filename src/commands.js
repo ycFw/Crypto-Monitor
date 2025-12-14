@@ -29,7 +29,7 @@ async function handleCommand(cmd, chatId) {
 
 <b>自动通知：</b>
 • 开仓/平仓
-• 加仓/减仓 (>1%)
+• 加仓/减仓 (>10%)
       `.trim(), chatId);
       break;
       
