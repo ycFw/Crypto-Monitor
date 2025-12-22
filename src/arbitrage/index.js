@@ -139,37 +139,41 @@ function getUptime() {
 async function main() {
   printConfig();
   
-  console.log('\n🚀 Starting Arbitrage Monitor...\n');
+  console.log('\n� Arbitrage Monitor is DISABLED\n');
   
   // 初始化命令处理
-  await initCommands();
-  setStats(stats);
+  // await initCommands();
+  // setStats(stats);
+  
+  // 套利监控已完全停用
+  console.log('\n⚠️  Arbitrage Monitor is DISABLED.\n');
+  console.log('套利监控功能已停用，如需启用请取消注释相关代码。\n');
   
   // 发送启动通知
-  await notifyStartup();
+  // await notifyStartup();
   
   // 立即执行一次扫描
-  await runScanCycle();
+  // await runScanCycle();
   
   // 定时扫描
-  setInterval(runScanCycle, ARBITRAGE_CONFIG.POLL_INTERVAL);
+  // setInterval(runScanCycle, ARBITRAGE_CONFIG.POLL_INTERVAL);
   
   // 定时检查命令（每2秒）
-  setInterval(checkCommands, 2000);
+  // setInterval(checkCommands, 2000);
   
-  // 定时报告状态（每小时）
-  setInterval(async () => {
-    await notifyStatus({
-      uptime: getUptime(),
-      scanCount: stats.scanCount,
-      totalOpportunities: stats.totalOpportunities,
-      notificationsSent: stats.notificationsSent,
-      lastOpportunity: stats.lastOpportunity,
-      lastScanTime: stats.lastScanTime
-    });
-  }, 60 * 60 * 1000);
+  // 定时报告状态（每小时）- 已禁用
+  // setInterval(async () => {
+  //   await notifyStatus({
+  //     uptime: getUptime(),
+  //     scanCount: stats.scanCount,
+  //     totalOpportunities: stats.totalOpportunities,
+  //     notificationsSent: stats.notificationsSent,
+  //     lastOpportunity: stats.lastOpportunity,
+  //     lastScanTime: stats.lastScanTime
+  //   });
+  // }, 60 * 60 * 1000);
   
-  console.log('\n✅ Arbitrage Monitor is running. Press Ctrl+C to stop.\n');
+  // console.log('\n✅ Arbitrage Monitor is running. Press Ctrl+C to stop.\n');
 }
 
 // 错误处理
